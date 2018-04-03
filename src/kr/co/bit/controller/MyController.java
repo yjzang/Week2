@@ -19,6 +19,7 @@ public class MyController extends HttpServlet {
 	public void init() throws ServletException {
 		// TODO Auto-generated method stub
 		list = new ArrayList<MemberVO>();
+		
 	}
 	
 	@Override
@@ -29,7 +30,6 @@ public class MyController extends HttpServlet {
 		
 		String cmd = request.getParameter("cmd"); 
 		cmd= cmd==null?cmd="":cmd;
-		System.out.println("working");
 		request.setCharacterEncoding("UTF-8");
 		String url = "./mvc/home.jsp";
 		
@@ -38,8 +38,8 @@ public class MyController extends HttpServlet {
 			url = "./mvc/regist_member.jsp";
 			
 		} else if(cmd.equals("regist")) {
-		
-				
+
+
 		String id = request.getParameter("id");
 		String pw = request.getParameter("pw");
 		String name = request.getParameter("name");
@@ -60,6 +60,7 @@ public class MyController extends HttpServlet {
 		MemberVO vo = new MemberVO();
 		vo.setId(id);
 		vo.setPw(pw);
+		name = new String(name.)
 		vo.setName(name);
 		vo.setEmail(email);
 		vo.setZipcode(zip1+"-"+zip2);
@@ -70,10 +71,33 @@ public class MyController extends HttpServlet {
 		vo.setLangs(temp);
 		//out.print(vo);
 		list.add(vo);
+		System.out.println(list.size()+"번째 등록");
 		request.setAttribute("vo", vo);
 		//response.sendRedirect("storage.jsp");
 		url= "./mvc/home.jsp";
-	}
+	}	else if(cmd.equals("search")) {
+			
+			String id = request.getParameter("id");
+			MemberVO member=null;
+			
+			for(MemberVO vo : list) {
+				if(vo.getId().equals(id)) {
+					request.setAttribute("vo", vo);
+					url = "./mvc/regist_member.jsp";
+					break;
+				} else{
+					request.setAttribute("vo", member);;
+					url = "./mvc/regist_member.jsp?id="+id;
+					break;
+				}
+				
+			}
+			
+	}  else if(cmd.equals("searchAll")) {
+		 	url = "./mvc/list.jsp";
+		 	
+		}
+	
 		
 		RequestDispatcher rd = request.getRequestDispatcher(url);
 		rd.forward(request, resp);

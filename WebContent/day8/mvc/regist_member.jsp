@@ -11,10 +11,7 @@
 		border : none;
 		color: red;
 	}
-	#zipmsg{
-		color : red;
-	}
-	#msg{
+	#zipmsg, #msg{
 		color : red;
 	}
 </style>
@@ -22,13 +19,12 @@
 	function id_check(){
 		//alert("success");
 		var checkid = document.getElementById("userid").value;
-		window.open("id_check.jsp?id="+checkid,"","width=300px height=200px");
+		window.open("./mvc/id_check.jsp?id="+checkid,"","width=300px height=200px");
 		return false;
 	}
 	function id_check_with_ajax(val){
 		//alert("success");
 		var cmd;
-	
 		if(val=='0'){
 			cmd = "id";
 		} else {
@@ -78,7 +74,7 @@
 	
 	var pr = function(result){
 		var pos = document.getElementById("zipmsg");
-		pos.innerHTML= result;
+		pos.innerHTML = result;
 		var zip1 = result.substring(0, 3);
 		var zip2 = result.substring(3, 6);
 		document.getElementById("zip1").value = zip1;
@@ -122,27 +118,23 @@
 		var val1 = document.getElementById("isIdCheck").value;
 		var val2 = document.getElementById("isZipCheck").value;
 		if(val1=="true"&&val2=="true"){
-			flag=true;
-		} else{
-			return false;
+			flag = true;
 		}
-		
 		alert(flag);
-		
+		return flag;
 	}
 </script>
 </head>
 <body>
 <%
-	MemberVO vo = (MemberVO)request.getAttribute("vo");
-	String message=""; 
+	MemberVO vo = (MemberVO)request.getAttribute("member");
+	String message = "";
 	if(vo==null){
 		//빈값 공백이 오도록 처리
 		String temp = request.getParameter("id");
 		if(temp!=null){
-			message = temp+"회원이 존재하지 않습니다.";
+			message = temp+" 회원이 존재하지 않습니다.";
 		}
-		
 		vo = new MemberVO();
 		vo.setId("");
 		vo.setPw("");
@@ -155,22 +147,19 @@
 		vo.setTool("0");
 		vo.setProject("1");
 	}
-	
-	
 %>
-<form action="./controller?cmd=regist" method="post" enctype="application/x-www-form-urlencoded">
+<form action="./controller?cmd=regist" method="post">
 <table>
 	<tr>
 		<td>아이디</td>
 		<td>
-			<input type="text" name="id" id="userid" value="<%=vo.getId()%>" >
+			<input type="text" name="id" id="userid" value="<%=vo.getId()%>" readonly="readonly" onclick="id_check()">
 			<input type="text" name="" id="message" disabled="disabled">
 			</td>
 	    <td><button onclick="return id_check_with_ajax(0)">id check</button></td>
 	    <td><input type="hidden" name="isIdCheck" value="false" id="isIdCheck"></td>
 	</tr>
-	<tr><td>패스워드</td><td><input type="password" name="pw" id="pw" value="<%=vo.getPw()%>">
-		<span id="msg"><%=message%></span>
+	<tr><td>패스워드</td><td><input type="password" name="pw" id="pw" value="<%=vo.getPw()%>" size="10"><span id="msg"><%=message%></span>
 	</td><td><button onclick="return check_empty()">빈칸 체크</button></td><td></td></tr>
 	<tr><td>이름</td><td><input type="text" name="name" id="name" value="<%=vo.getName()%>"></td><td></td><td></td></tr>
 	<tr><td>우편번호</td>
